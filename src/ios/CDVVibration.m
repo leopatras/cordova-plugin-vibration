@@ -23,7 +23,15 @@
 
 - (void)vibrate:(CDVInvokedUrlCommand*)command
 {
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+  //https://stackoverflow.com/questions/4724980/making-the-iphone-vibrate
+  if([[UIDevice currentDevice].model isEqualToString:@"iPhone"]) {
+    AudioServicesPlaySystemSound (1352); //works ALWAYS as of this post
+  } else {
+    // Not an iPhone, so doesn't have vibrate
+    // play the less annoying tick noise or one of your own
+    AudioServicesPlayAlertSound (1105);
+  }
+  [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
 }
 
 @end
